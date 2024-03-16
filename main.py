@@ -26,7 +26,8 @@ def scrape(file):
 
     # download each url
     for url in urls:
-        click.echo(f"Downloading {url}")
+        click.echo()
+        click.echo(f"Downloading {url.strip()}...")
 
         # check if the url has been scraped before, if so, skip
         try:
@@ -59,6 +60,7 @@ def scrape(file):
         # </div>
         div = soup.find("div", class_="tips close-box")
         video_name = div.find("li").text.split("：")[1]
+        click.echo(f"Found video name: {video_name}...")
 
         # find a div with class `embed-responsive clearfix`
         div = soup.find("div", class_="embed-responsive clearfix")
@@ -67,7 +69,7 @@ def scrape(file):
 
         # parse var player_aaaa = { ... } using json
         player = json.loads(script.text.split("=")[1].strip().replace(";", ""))
-        print(player)
+        click.echo(f"Found m3u url: {player['url']}...")
 
         # get 'url' from player
         m3u_url = player["url"]
@@ -77,14 +79,19 @@ def scrape(file):
             "outtmpl": f"{video_name}.mp4",
             "addmetadata": True,
             "metadatafromtitle": video_name,
-            "fragment-retries": "infinite",
+            "fragment_retries": 9999,
+            # "skip_unavailable_fragments": False,
         }
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([m3u_url])
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([m3u_url])
 
-        # write progress to file
-        with open("progress.txt", "a", encoding="utf-8") as f:
-            f.write(url)
+            # write progress to file
+            with open("progress.txt", "a", encoding="utf-8") as f:
+                f.write(url)
+
+        except yt_dlp.DownloadError as e:
+            click.echo(f"Error downloading {url}: {e}")
 
 
 if __name__ == "__main__":
