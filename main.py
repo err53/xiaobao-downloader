@@ -26,7 +26,7 @@ def scrape(file):
 
     # download each url
     for url in urls:
-        click.echo(f"Downloading {url}...")
+        click.echo(f"Downloading {url}")
 
         # check if the url has been scraped before, if so, skip
         try:
@@ -84,7 +84,7 @@ def scrape(file):
 
         # write progress to file
         with open("progress.txt", "a", encoding="utf-8") as f:
-            f.write(f"{url}")
+            f.write(url)
 
 
 if __name__ == "__main__":
