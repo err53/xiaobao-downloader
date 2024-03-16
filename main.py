@@ -79,19 +79,25 @@ def scrape(file):
             "outtmpl": f"{video_name}.mp4",
             "addmetadata": True,
             "metadatafromtitle": video_name,
-            "fragment_retries": 9999,
-            # "skip_unavailable_fragments": False,
+            "fragment_retries": 10,
+            "skip_unavailable_fragments": False,
         }
-        try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([m3u_url])
 
-            # write progress to file
-            with open("progress.txt", "a", encoding="utf-8") as f:
-                f.write(url)
+        # download the m3u file, retrying 10 times
+        for _ in range(10):
+            try:
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([m3u_url])
 
-        except yt_dlp.DownloadError as e:
-            click.echo(f"Error downloading {url}: {e}")
+                # write progress to file
+                with open("progress.txt", "a", encoding="utf-8") as f:
+                    f.write(url)
+
+                break
+
+            except yt_dlp.DownloadError as e:
+                click.echo(f"Error downloading {url}: {e}")
+                continue
 
 
 if __name__ == "__main__":
