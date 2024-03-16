@@ -84,7 +84,7 @@ def scrape(file):
 
         # write progress to file
         with open("progress.txt", "a", encoding="utf-8") as f:
-            f.write(f"{url}\n")
+            f.write(f"{url}")
 
 
 if __name__ == "__main__":
