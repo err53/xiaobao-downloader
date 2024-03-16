@@ -77,6 +77,7 @@ def scrape(file):
             "outtmpl": f"{video_name}.mp4",
             "addmetadata": True,
             "metadatafromtitle": video_name,
+            "fragment-retries": "infinite",
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([m3u_url])
