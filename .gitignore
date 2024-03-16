@@ -178,3 +178,4 @@ pyrightconfig.json
 # custom
 urls.txt
 progress.txt
+*.mp4
