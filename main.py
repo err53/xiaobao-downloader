@@ -43,7 +43,7 @@ def scrape(file):
         # parse the page
         soup = BeautifulSoup(response.text, "html.parser")
 
-        # find video name from now playing test `正在播放：...`
+        # find video name from now playing text `正在播放：...`
         # <div class="tips close-box" style="background-color: #181515">
         #   <a class="tips-close-btn pull-right" href="javascript:;"
         #     ><i class="fa fa-close"></i
